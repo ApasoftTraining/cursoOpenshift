@@ -1,0 +1,14 @@
+apiVersion: project.openshift.io/v1
+kind: Project
+metadata:
+  annotations:
+    openshift.io/description: Esto es la descripcion del proyecto
+    openshift.io/display-name: Ejemplo de creacion de una proyecto Openshift
+    openshift.io/requester: developer
+    documentacion: Ejemplo para crear un proyecto en openshift
+  name: desa2
+  labels:
+     tipo: desa
+spec:
+  finalizers:
+  - kubernetes
