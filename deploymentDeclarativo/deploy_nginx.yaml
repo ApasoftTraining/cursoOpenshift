@@ -3,11 +3,11 @@ kind: Deployment
 metadata:
   name: nginx-d
 spec:
-  selector:   #permite seleccionar un conjunto de objetos que cumplan las condicione
+  selector:   
     matchLabels:
       app: nginx
-  replicas: 2 # indica al controlador que ejecute 2 pods
-  template:   # Plantilla que define los containers
+  replicas: 3 
+  template:   
     metadata:
       labels:
         app: nginx
