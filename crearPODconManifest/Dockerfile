@@ -1,5 +1,5 @@
 ##Descargamos una versión concreta de UBUNTU, a través del tag
-FROM ubuntu:18.04
+FROM ubuntu:12.04
 MAINTAINER Apasoft Formacion "apasoft.formacion@gmail.com"
 ##Actualizamos el sistema
 RUN apt-get update

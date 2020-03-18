@@ -1,11 +1,13 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: nginx1
+  name: nginx-openshift
   labels:
-    zone: prod
+    zona: prod
     version: v1
+  annotations:
+    descripcion: Curso de Openshift de Apasoft Training
 spec:
   containers:
    - name: nginx   
-     image: apasoft/nginx:v1
+     image: apasoft/nginx-openshift:latest
