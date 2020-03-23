@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: rep-controller1
+spec:
+  replicas: 3
+  selector:
+    app: apasoft-rc
+  template:
+    metadata:
+      name: apasoft-rc
+      labels:
+        app: apasoft-rc
+    spec:
+      containers:
+      - name: apasoft-rc
+        image: apasoft/blog
+        ports:
+        - containerPort: 80
