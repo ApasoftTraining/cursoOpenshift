@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysqlbbdd
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: mysqlbbdd
+  clusterIP: None
+---
+apiVersion: apps/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: mysqlbbdd
+spec:
+  selector:
+    matchLabels:
+      app: mysqlbbdd
+  strategy:
+    type: Recreate  #Rolling
+  template:
+    metadata:
+      labels:
+        app: mysqlbbdd
+    spec:
+      containers:
+      - image: mysql:5.6
+        name: mysql
+        env:
+          # Use secret in real usage
+        - name: MYSQL_ROOT_PASSWORD
+          value: password
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-bbdd
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-bbdd
+        persistentVolumeClaim:
+          claimName: mysql-claim

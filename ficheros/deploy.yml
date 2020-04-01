@@ -1,0 +1,24 @@
+kind: "DeploymentConfig"
+apiVersion: "v1"
+metadata:
+  name: "frontend"
+spec:
+  template: 
+    metadata:
+      labels:
+        name: "frontend"
+    spec:
+      containers:
+        - name: "helloworld"
+          image: "ruby-hello-world"
+          ports:
+            - containerPort: 8080
+              protocol: "TCP"
+  replicas: 5 
+  triggers:
+    - type: "ConfigChange"     
+  strategy: 
+    type: "Rolling"
+  paused: false 
+  revisionHistoryLimit: 2 
+  minReadySeconds: 0 

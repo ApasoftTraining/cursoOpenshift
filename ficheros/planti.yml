@@ -1,0 +1,41 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+message: '... The GitHub webhook secret is ${GITHUB_WEBHOOK_SECRET} ...'
+metadata:
+  creationTimestamp: '2020-01-22T14:08:49Z'
+  name: plantilla-curso
+  namespace: p1
+objects:
+  - apiVersion: v1
+    kind: BuildConfig
+    metadata:
+      annotations:
+        description: Defines how to build the application
+      name: plantilla-curso
+    spec:
+      source:
+        contextDir: '${CONTEXT_DIR}'
+        git:
+          ref: '${SOURCE_REPOSITORY_REF}'
+          uri: '${SOURCE_REPOSITORY_URL}'
+        type: Git
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: frontend
+    spec:
+      replicas: '${{REPLICA_COUNT}}'
+parameters:
+  - description: The URL of the repository with your application source code
+    displayName: Source Repository URL
+    name: SOURCE_REPOSITORY_URL
+    required: true
+    value: 'https://github.com/sclorg/cakephp-ex.git'
+  - description: A secret string used to configure the GitHub webhook
+    from: '[a-zA-Z0-9]{40}'
+    generate: expression
+    name: GITHUB_WEBHOOK_SECRET
+  - description: Number of replicas to run
+    name: REPLICA_COUNT
+    required: true
+    value: '2'

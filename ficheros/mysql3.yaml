@@ -1,0 +1,53 @@
+kind: "DeploymentConfig"
+apiVersion: "v1"
+metadata:
+  name: "mysql-master1"
+spec:
+  strategy:
+    type: "Recreate"
+  triggers:
+    - type: "ConfigChange"
+  replicas: 1
+  selector:
+    name: "mysql-master"
+  template:
+    metadata:
+      labels:
+        name: "mysql-master"
+    spec:
+      volumes:
+        - name: "mysql-master-data"
+          persistentVolumeClaim:
+            claimName: "mysql1"
+      containers:
+        - name: "server"
+          image: "openshift/mysql-56-centos7"
+          command:
+            - "run-mysqld"
+          ports:
+            - containerPort: 3306
+              protocol: "TCP"
+          env:
+            - name: "MYSQL_MASTER_USER"
+              value: "${MYSQL_MASTER_USER}"
+            - name: "MYSQL_MASTER_PASSWORD"
+              value: "${MYSQL_MASTER_PASSWORD}"
+            - name: "MYSQL_USER"
+              value: "${MYSQL_USER}"
+            - name: "MYSQL_PASSWORD"
+              value: "${MYSQL_PASSWORD}"
+            - name: "MYSQL_DATABASE"
+              value: "${MYSQL_DATABASE}"
+            - name: "MYSQL_ROOT_PASSWORD"
+              value: "${MYSQL_ROOT_PASSWORD}"
+          volumeMounts:
+            - name: "mysql-master-data"
+              mountPath: "/var/lib/mysql/data"
+          resources: {}
+          terminationMessagePath: "/dev/termination-log"
+          imagePullPolicy: "IfNotPresent"
+          securityContext:
+            capabilities: {}
+            privileged: false
+      restartPolicy: "Always"
+      dnsPolicy: "ClusterFirst"

@@ -1,0 +1,56 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: plantilla-curso
+objects:
+  - kind: BuildConfig
+    apiVersion: v1
+    metadata:
+      name: aplicacion
+      annotations:
+        description: Defines how to build the application
+    spec:
+      source:
+        type: Git
+        git:
+          uri: "${SOURCE_REPOSITORY_URL}" 
+          ref: "${SOURCE_REPOSITORY_REF}"
+        contextDir: "${CONTEXT_DIR}"
+      strategy:
+        sourceStrategy:
+        type: Source
+  - kind: DeploymentConfig
+    apiVersion: v1
+    metadata:
+      name: frontend
+    spec:
+      replicas: "${{REPLICA_COUNT}}"
+    strategy:
+        type: Recreate
+    template:
+        metadata:
+          labels:
+            deploymentConfig: '${APPLICATION_NAME}'
+        spec:
+          containers:
+              image: '${APPLICATION_NAME}'
+              imagePullPolicy: Always
+              name: '${APPLICATION_NAME}'
+parameters:
+  - name: SOURCE_REPOSITORY_URL 
+    displayName: Source Repository URL 
+    description: The URL of the repository with your application source code 
+    value: https://github.com/sclorg/cakephp-ex.git 
+    required: true 
+  - name: GITHUB_WEBHOOK_SECRET
+    description: A secret string used to configure the GitHub webhook
+    generate: expression 
+    from: "[a-zA-Z0-9]{40}" 
+  - name: REPLICA_COUNT
+    description: Number of replicas to run
+    value: "2"
+    required: true
+  - description: nombre aplicacion.
+    name: APPLICATION_NAME
+    value: curso-openshift
+message: "... la password para el WEBHOOK es  ${GITHUB_WEBHOOK_SECRET} ..."

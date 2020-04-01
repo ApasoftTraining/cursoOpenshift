@@ -1,0 +1,33 @@
+    {
+            "kind": "ImageStream",
+            "apiVersion": "v1",
+            "metadata": {
+                "name": "wldfly",
+                "annotations": {
+                    "openshift.io/display-name": "wildfly",
+                    "openshift.io/provider-display-name": "Red Hat, Inc.",
+                    "version": "1.4.18"
+                }
+            },
+            "labels": {
+                "xpaas": "1.4.18"
+            },
+            "spec": 
+            {
+                "tags": [
+                    {
+                        "name": "latest",
+                        
+                        "referencePolicy": {
+                            "type": "Local"
+                        },
+                        "from": {
+                            "kind": "DockerImage",
+                            "name": "jboss/wildfly:latest"
+                        }
+                    }
+                    ]
+                }
+                
+            }
+        

@@ -1,0 +1,8 @@
+oc process -f plantilla.yaml
+
+oc process --parameters -f plantilla.yaml 
+                        -n namespace plantilla1 
+						
+oc process redis-template -p REDIS_PASSWORD=xxxxx | oc create -f -
+
+

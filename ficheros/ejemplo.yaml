@@ -1,0 +1,451 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    annotations:
+      openshift.io/deployment-config.latest-version: "2"
+      openshift.io/deployment-config.name: blog
+      openshift.io/deployment.name: blog-2
+      openshift.io/generated-by: OpenShiftNewApp
+      openshift.io/scc: restricted
+    creationTimestamp: 2020-01-21T07:41:53Z
+    generateName: blog-2-
+    labels:
+      app: blog
+      deployment: blog-2
+      deploymentconfig: blog
+    name: blog-2-wz6gw
+    namespace: p1
+    ownerReferences:
+    - apiVersion: v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicationController
+      name: blog-2
+      uid: 7c637d3a-3c21-11ea-a668-080027ba7bb7
+    resourceVersion: "365336"
+    selfLink: /api/v1/namespaces/p1/pods/blog-2-wz6gw
+    uid: 7de25d8b-3c21-11ea-a668-080027ba7bb7
+  spec:
+    containers:
+    - env:
+      - name: BLOG_BANNER_COLOR
+        value: green
+      image: openshiftkatacoda/blog-django-py@sha256:ec0149d51aac5db76abba4df956021c8d0f58b0e153160bd6b1eb8e967830bb5
+      imagePullPolicy: Always
+      name: blog
+      ports:
+      - containerPort: 8080
+        protocol: TCP
+      resources: {}
+      securityContext:
+        capabilities:
+          drop:
+          - KILL
+          - MKNOD
+          - SETGID
+          - SETUID
+        runAsUser: 1000160000
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: default-token-ffg5b
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    imagePullSecrets:
+    - name: default-dockercfg-9sp9w
+    nodeName: localhost
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext:
+      fsGroup: 1000160000
+      seLinuxOptions:
+        level: s0:c13,c2
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    volumes:
+    - name: default-token-ffg5b
+      secret:
+        defaultMode: 420
+        secretName: default-token-ffg5b
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: 2020-01-21T07:41:53Z
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: 2020-01-21T17:35:50Z
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: null
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: 2020-01-21T07:41:53Z
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://7e730c680a21831d86211740012cd378dc2b8fb0586db926526f6f65fd086a1f
+      image: docker.io/openshiftkatacoda/blog-django-py@sha256:ec0149d51aac5db76abba4df956021c8d0f58b0e153160bd6b1eb8e967830bb5
+      imageID: docker-pullable://docker.io/openshiftkatacoda/blog-django-py@sha256:ec0149d51aac5db76abba4df956021c8d0f58b0e153160bd6b1eb8e967830bb5
+      lastState:
+        terminated:
+          containerID: docker://b463a925d9313b38bc5f1d9b21a9f615f1bbd15087b7191e8473949181684930
+          exitCode: 255
+          finishedAt: 2020-01-21T17:16:36Z
+          reason: Error
+          startedAt: 2020-01-21T07:41:58Z
+      name: blog
+      ready: true
+      restartCount: 1
+      state:
+        running:
+          startedAt: 2020-01-21T17:35:48Z
+    hostIP: 10.0.2.15
+    phase: Running
+    podIP: 172.17.0.9
+    qosClass: BestEffort
+    startTime: 2020-01-21T07:41:53Z
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      kubectl.kubernetes.io/original-replicas: "1"
+      openshift.io/deployer-pod.completed-at: 2020-01-21 07:12:28 +0000 UTC
+      openshift.io/deployer-pod.created-at: 2020-01-21 07:11:14 +0000 UTC
+      openshift.io/deployer-pod.name: blog-1-deploy
+      openshift.io/deployment-config.latest-version: "1"
+      openshift.io/deployment-config.name: blog
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: "1"
+      openshift.io/deployment.status-reason: config change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"apps.openshift.io/v1","metadata":{"name":"blog","namespace":"p1","selfLink":"/apis/apps.openshift.io/v1/namespaces/p1/deploymentconfigs/blog","uid":"34aae860-3c1d-11ea-8c33-080027ba7bb7","resourceVersion":"217711","generation":2,"creationTimestamp":"2020-01-21T07:11:12Z","labels":{"app":"blog"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ConfigChange"},{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["blog"],"from":{"kind":"ImageStreamTag","namespace":"p1","name":"blog:latest"},"lastTriggeredImage":"openshiftkatacoda/blog-django-py@sha256:ec0149d51aac5db76abba4df956021c8d0f58b0e153160bd6b1eb8e967830bb5"}}],"replicas":1,"revisionHistoryLimit":10,"test":false,"selector":{"app":"blog","deploymentconfig":"blog"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"blog","deploymentconfig":"blog"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"containers":[{"name":"blog","image":"openshiftkatacoda/blog-django-py@sha256:ec0149d51aac5db76abba4df956021c8d0f58b0e153160bd6b1eb8e967830bb5","ports":[{"containerPort":8080,"protocol":"TCP"}],"resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":1,"observedGeneration":1,"replicas":0,"updatedReplicas":0,"availableReplicas":0,"unavailableReplicas":0,"details":{"message":"config change","causes":[{"type":"ConfigChange"}]},"conditions":[{"type":"Available","status":"False","lastUpdateTime":"2020-01-21T07:11:12Z","lastTransitionTime":"2020-01-21T07:11:12Z","message":"Deployment config does not have minimum availability."}]}}
+    creationTimestamp: 2020-01-21T07:11:14Z
+    generation: 3
+    labels:
+      app: blog
+      openshift.io/deployment-config.name: blog
+    name: blog-1
+    namespace: p1
+    ownerReferences:
+    - apiVersion: apps.openshift.io/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: DeploymentConfig
+      name: blog
+      uid: 34aae860-3c1d-11ea-8c33-080027ba7bb7
+    resourceVersion: "225223"
+    selfLink: /api/v1/namespaces/p1/replicationcontrollers/blog-1
+    uid: 35cc09e8-3c1d-11ea-a668-080027ba7bb7
+  spec:
+    replicas: 0
+    selector:
+      app: blog
+      deployment: blog-1
+      deploymentconfig: blog
+    template:
+      metadata:
+        annotations:
+          openshift.io/deployment-config.latest-version: "1"
+          openshift.io/deployment-config.name: blog
+          openshift.io/deployment.name: blog-1
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: blog
+          deployment: blog-1
+          deploymentconfig: blog
+      spec:
+        containers:
+        - image: openshiftkatacoda/blog-django-py@sha256:ec0149d51aac5db76abba4df956021c8d0f58b0e153160bd6b1eb8e967830bb5
+          imagePullPolicy: Always
+          name: blog
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    observedGeneration: 3
+    replicas: 0
+- apiVersion: v1
+  kind: ReplicationController
+  metadata:
+    annotations:
+      openshift.io/deployer-pod.completed-at: 2020-01-21 07:42:01 +0000 UTC
+      openshift.io/deployer-pod.created-at: 2020-01-21 07:41:50 +0000 UTC
+      openshift.io/deployer-pod.name: blog-2-deploy
+      openshift.io/deployment-config.latest-version: "2"
+      openshift.io/deployment-config.name: blog
+      openshift.io/deployment.phase: Complete
+      openshift.io/deployment.replicas: ""
+      openshift.io/deployment.status-reason: config change
+      openshift.io/encoded-deployment-config: |
+        {"kind":"DeploymentConfig","apiVersion":"apps.openshift.io/v1","metadata":{"name":"blog","namespace":"p1","selfLink":"/apis/apps.openshift.io/v1/namespaces/p1/deploymentconfigs/blog","uid":"34aae860-3c1d-11ea-8c33-080027ba7bb7","resourceVersion":"225148","generation":3,"creationTimestamp":"2020-01-21T07:11:12Z","labels":{"app":"blog"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"strategy":{"type":"Rolling","rollingParams":{"updatePeriodSeconds":1,"intervalSeconds":1,"timeoutSeconds":600,"maxUnavailable":"25%","maxSurge":"25%"},"resources":{},"activeDeadlineSeconds":21600},"triggers":[{"type":"ConfigChange"},{"type":"ImageChange","imageChangeParams":{"automatic":true,"containerNames":["blog"],"from":{"kind":"ImageStreamTag","namespace":"p1","name":"blog:latest"},"lastTriggeredImage":"openshiftkatacoda/blog-django-py@sha256:ec0149d51aac5db76abba4df956021c8d0f58b0e153160bd6b1eb8e967830bb5"}}],"replicas":1,"revisionHistoryLimit":10,"test":false,"selector":{"app":"blog","deploymentconfig":"blog"},"template":{"metadata":{"creationTimestamp":null,"labels":{"app":"blog","deploymentconfig":"blog"},"annotations":{"openshift.io/generated-by":"OpenShiftNewApp"}},"spec":{"containers":[{"name":"blog","image":"openshiftkatacoda/blog-django-py@sha256:ec0149d51aac5db76abba4df956021c8d0f58b0e153160bd6b1eb8e967830bb5","ports":[{"containerPort":8080,"protocol":"TCP"}],"env":[{"name":"BLOG_BANNER_COLOR","value":"green"}],"resources":{},"terminationMessagePath":"/dev/termination-log","terminationMessagePolicy":"File","imagePullPolicy":"Always"}],"restartPolicy":"Always","terminationGracePeriodSeconds":30,"dnsPolicy":"ClusterFirst","securityContext":{},"schedulerName":"default-scheduler"}}},"status":{"latestVersion":2,"observedGeneration":2,"replicas":1,"updatedReplicas":1,"availableReplicas":1,"unavailableReplicas":0,"details":{"message":"config change","causes":[{"type":"ConfigChange"}]},"conditions":[{"type":"Available","status":"True","lastUpdateTime":"2020-01-21T07:12:28Z","lastTransitionTime":"2020-01-21T07:12:28Z","message":"Deployment config has minimum availability."},{"type":"Progressing","status":"True","lastUpdateTime":"2020-01-21T07:12:29Z","lastTransitionTime":"2020-01-21T07:12:29Z","reason":"NewReplicationControllerAvailable","message":"replication controller \"blog-1\" successfully rolled out"}],"readyReplicas":1}}
+    creationTimestamp: 2020-01-21T07:41:50Z
+    generation: 2
+    labels:
+      app: blog
+      openshift.io/deployment-config.name: blog
+    name: blog-2
+    namespace: p1
+    ownerReferences:
+    - apiVersion: apps.openshift.io/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: DeploymentConfig
+      name: blog
+      uid: 34aae860-3c1d-11ea-8c33-080027ba7bb7
+    resourceVersion: "365337"
+    selfLink: /api/v1/namespaces/p1/replicationcontrollers/blog-2
+    uid: 7c637d3a-3c21-11ea-a668-080027ba7bb7
+  spec:
+    replicas: 1
+    selector:
+      app: blog
+      deployment: blog-2
+      deploymentconfig: blog
+    template:
+      metadata:
+        annotations:
+          openshift.io/deployment-config.latest-version: "2"
+          openshift.io/deployment-config.name: blog
+          openshift.io/deployment.name: blog-2
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: blog
+          deployment: blog-2
+          deploymentconfig: blog
+      spec:
+        containers:
+        - env:
+          - name: BLOG_BANNER_COLOR
+            value: green
+          image: openshiftkatacoda/blog-django-py@sha256:ec0149d51aac5db76abba4df956021c8d0f58b0e153160bd6b1eb8e967830bb5
+          imagePullPolicy: Always
+          name: blog
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 2
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: 2020-01-21T07:11:12Z
+    labels:
+      app: blog
+    name: blog
+    namespace: p1
+    resourceVersion: "217699"
+    selfLink: /api/v1/namespaces/p1/services/blog
+    uid: 34b3e5f5-3c1d-11ea-a668-080027ba7bb7
+  spec:
+    clusterIP: 172.30.229.155
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: blog
+      deploymentconfig: blog
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: 2020-01-21T07:11:12Z
+    generation: 3
+    labels:
+      app: blog
+    name: blog
+    namespace: p1
+    resourceVersion: "225244"
+    selfLink: /apis/apps.openshift.io/v1/namespaces/p1/deploymentconfigs/blog
+    uid: 34aae860-3c1d-11ea-8c33-080027ba7bb7
+  spec:
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      app: blog
+      deploymentconfig: blog
+    strategy:
+      activeDeadlineSeconds: 21600
+      resources: {}
+      rollingParams:
+        intervalSeconds: 1
+        maxSurge: 25%
+        maxUnavailable: 25%
+        timeoutSeconds: 600
+        updatePeriodSeconds: 1
+      type: Rolling
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: blog
+          deploymentconfig: blog
+      spec:
+        containers:
+        - env:
+          - name: BLOG_BANNER_COLOR
+            value: green
+          image: openshiftkatacoda/blog-django-py@sha256:ec0149d51aac5db76abba4df956021c8d0f58b0e153160bd6b1eb8e967830bb5
+          imagePullPolicy: Always
+          name: blog
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - blog
+        from:
+          kind: ImageStreamTag
+          name: blog:latest
+          namespace: p1
+        lastTriggeredImage: openshiftkatacoda/blog-django-py@sha256:ec0149d51aac5db76abba4df956021c8d0f58b0e153160bd6b1eb8e967830bb5
+      type: ImageChange
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: 2020-01-21T07:12:28Z
+      lastUpdateTime: 2020-01-21T07:12:28Z
+      message: Deployment config has minimum availability.
+      status: "True"
+      type: Available
+    - lastTransitionTime: 2020-01-21T07:41:59Z
+      lastUpdateTime: 2020-01-21T07:42:01Z
+      message: replication controller "blog-2" successfully rolled out
+      reason: NewReplicationControllerAvailable
+      status: "True"
+      type: Progressing
+    details:
+      causes:
+      - type: ConfigChange
+      message: config change
+    latestVersion: 2
+    observedGeneration: 3
+    readyReplicas: 1
+    replicas: 1
+    unavailableReplicas: 0
+    updatedReplicas: 1
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+      openshift.io/image.dockerRepositoryCheck: 2020-01-21T07:11:13Z
+    creationTimestamp: 2020-01-21T07:11:12Z
+    generation: 2
+    labels:
+      app: blog
+    name: blog
+    namespace: p1
+    resourceVersion: "217709"
+    selfLink: /apis/image.openshift.io/v1/namespaces/p1/imagestreams/blog
+    uid: 34a7c977-3c1d-11ea-8c33-080027ba7bb7
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/imported-from: openshiftkatacoda/blog-django-py
+      from:
+        kind: DockerImage
+        name: openshiftkatacoda/blog-django-py
+      generation: 2
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: Source
+  status:
+    dockerImageRepository: 172.30.1.1:5000/p1/blog
+    tags:
+    - items:
+      - created: 2020-01-21T07:11:13Z
+        dockerImageReference: openshiftkatacoda/blog-django-py@sha256:ec0149d51aac5db76abba4df956021c8d0f58b0e153160bd6b1eb8e967830bb5
+        generation: 2
+        image: sha256:ec0149d51aac5db76abba4df956021c8d0f58b0e153160bd6b1eb8e967830bb5
+      tag: latest
+- apiVersion: route.openshift.io/v1
+  kind: Route
+  metadata:
+    annotations:
+      openshift.io/host.generated: "true"
+    creationTimestamp: 2020-01-21T07:41:27Z
+    labels:
+      app: blog
+    name: blog
+    namespace: p1
+    resourceVersion: "225055"
+    selfLink: /apis/route.openshift.io/v1/namespaces/p1/routes/blog
+    uid: 6e639e01-3c21-11ea-8c33-080027ba7bb7
+  spec:
+    host: blog-p1.192.168.99.101.nip.io
+    port:
+      targetPort: 8080-tcp
+    to:
+      kind: Service
+      name: blog
+      weight: 100
+    wildcardPolicy: None
+  status:
+    ingress:
+    - conditions:
+      - lastTransitionTime: 2020-01-21T07:41:27Z
+        status: "True"
+        type: Admitted
+      host: blog-p1.192.168.99.101.nip.io
+      routerName: router
+      wildcardPolicy: None
+kind: List
+metadata:
+  resourceVersion: ""
+  selfLink: ""

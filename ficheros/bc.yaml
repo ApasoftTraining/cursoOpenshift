@@ -1,0 +1,30 @@
+kind: "BuildConfig"
+apiVersion: "v1"
+metadata:
+  name: "ruby-sample-build" 
+spec:
+  runPolicy: "Serial" 
+  triggers: 
+    -
+      type: "GitHub"
+      github:
+        secret: "secret101"
+    - type: "Generic"
+      generic:
+        secret: "secret101"
+    -
+      type: "ImageChange"
+  source: 
+    git:
+      uri: "https://github.com/openshift/ruby-hello-world"
+  strategy: 
+    sourceStrategy:
+      from:
+        kind: "ImageStreamTag"
+        name: "ruby-20-centos7:latest"
+  output: 
+    to:
+      kind: "ImageStreamTag"
+      name: "origin-ruby-sample:latest"
+  postCommit: 
+      script: "bundle exec rake test"

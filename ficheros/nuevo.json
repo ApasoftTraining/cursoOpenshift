@@ -1,0 +1,12 @@
+{
+    "apiVersion": "v1",
+    "data": {
+        "BLOG_BANNER_COLOR": "blue",
+        "BLOG_SITE_NAME": "ejemplo de  site"
+    },
+    "kind": "ConfigMap",
+    "metadata": {
+        "name": "nuevo",
+        "namespace": "p1"
+    }
+}

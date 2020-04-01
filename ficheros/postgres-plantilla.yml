@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: postgres-plantilla
+  annotations:
+    description: "Description"
+    iconClass: "icon-postgresql"
+    tags: "database,nosql"
+objects:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    name: ${SERVIDOR}
+  spec:
+    containers:
+    - env:
+      - name: POSTGRES_PASSWORD
+        value: ${POSTGRES_PASSWORD}
+      - name: POSTGRES_USER
+        value: ${POSTGRES_USER}
+      - name: POSTGRES_DB
+        value: ${POSTGRES_DB}  
+      image: postgresql
+      name: master
+      ports:
+      - containerPort: 6379
+        protocol: TCP
+parameters:
+- description: Password used for pOSTGRESQL authentication
+  from: '[A-Z0-9]{8}'
+  generate: expression
+  name: POSTGRES_PASSWORD
+- name: SERVIDOR
+  from: 'server[a-z0-9]{5}'
+  generate: expression
+- name: POSTGRES_USER
+  value: curso
+- name: POSTGRES_DB
+  value: cursodb
+labels:
+  postgres: servidor-normal

@@ -1,0 +1,275 @@
+apiVersion: template.openshift.io/v1
+kind: Template
+labels:
+  application: mlbparks
+  createdBy: template-mlbparks-eap
+metadata:
+  annotations:
+    description: >-
+      Application template for MLB Parks application on EAP 6 & MongoDB built
+      using STI
+    iconClass: icon-jboss
+  name: mlbparks-eap
+  namespace: pipelines
+objects:
+  - apiVersion: v1
+    kind: BuildConfig
+    metadata:
+      name: '${APPLICATION_NAME}'
+    spec:
+      output:
+        to:
+          kind: ImageStreamTag
+          name: '${APPLICATION_NAME}:latest'
+      source:
+        git:
+          ref: '${GIT_REF}'
+          uri: '${GIT_URI}'
+        type: Git
+      strategy:
+        sourceStrategy:
+          env:
+            - name: MAVEN_MIRROR_URL
+              value: '${MAVEN_MIRROR_URL}'
+          from:
+            kind: ImageStreamTag
+            name: 'jboss-eap64-openshift:1.3'
+            namespace: openshift
+        type: Source
+      triggers:
+        - generic:
+            secret: '${GENERIC_TRIGGER_SECRET}'
+          type: Generic
+        - github:
+            secret: '${GITHUB_TRIGGER_SECRET}'
+          type: GitHub
+        - imageChange: {}
+          type: ImageChange
+  - apiVersion: v1
+    kind: ImageStream
+    metadata:
+      name: '${APPLICATION_NAME}'
+    spec:
+      dockerImageRepository: ''
+      tags:
+        - name: latest
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      name: '${APPLICATION_NAME}-mongodb'
+    spec:
+      replicas: 1
+      selector:
+        deploymentConfig: '${APPLICATION_NAME}-mongodb'
+      strategy:
+        type: Recreate
+      template:
+        metadata:
+          labels:
+            deploymentConfig: '${APPLICATION_NAME}-mongodb'
+          name: '${APPLICATION_NAME}-mongodb'
+        spec:
+          containers:
+            - env:
+                - name: MONGODB_USER
+                  value: '${MONGODB_USER}'
+                - name: MONGODB_PASSWORD
+                  value: '${MONGODB_PASSWORD}'
+                - name: MONGODB_DATABASE
+                  value: '${MONGODB_DATABASE}'
+                - name: MONGODB_ADMIN_PASSWORD
+                  value: '${MONGODB_ADMIN_PASSWORD}'
+                - name: MONGODB_NOPREALLOC
+                  value: '${MONGODB_NOPREALLOC}'
+                - name: MONGODB_SMALLFILES
+                  value: '${MONGODB_SMALLFILES}'
+                - name: MONGODB_QUIET
+                  value: '${MONGODB_QUIET}'
+              image: mongodb
+              imagePullPolicy: IfNotPresent
+              name: '${APPLICATION_NAME}-mongodb'
+              ports:
+                - containerPort: 27017
+                  protocol: TCP
+              resources: {}
+              securityContext:
+                capabilities: {}
+                privileged: false
+              terminationMessagePath: /dev/termination-log
+              volumeMounts:
+                - mountPath: /var/lib/mongodb/data
+                  name: '${APPLICATION_NAME}-mongodb-data'
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+          volumes:
+            - emptyDir: {}
+              name: '${APPLICATION_NAME}-mongodb-data'
+      triggers:
+        - imageChangeParams:
+            automatic: true
+            containerNames:
+              - '${APPLICATION_NAME}-mongodb'
+            from:
+              kind: ImageStreamTag
+              name: 'mongodb:2.6'
+              namespace: openshift
+          type: ImageChange
+        - type: ConfigChange
+  - apiVersion: v1
+    kind: DeploymentConfig
+    metadata:
+      labels:
+        deploymentConfig: '${APPLICATION_NAME}'
+      name: '${APPLICATION_NAME}'
+    spec:
+      replicas: 1
+      selector:
+        deploymentConfig: '${APPLICATION_NAME}'
+      strategy:
+        type: Recreate
+      template:
+        metadata:
+          labels:
+            deploymentConfig: '${APPLICATION_NAME}'
+        spec:
+          containers:
+            - env:
+                - name: OPENSHIFT_DNS_PING_SERVICE_NAME
+                  value: '${APPLICATION_NAME}-ping'
+                - name: OPENSHIFT_DNS_PING_SERVICE_PORT
+                  value: '8888'
+                - name: MONGODB_USER
+                  value: '${MONGODB_USER}'
+                - name: MONGODB_PASSWORD
+                  value: '${MONGODB_PASSWORD}'
+                - name: MONGODB_DATABASE
+                  value: '${MONGODB_DATABASE}'
+                - name: MONGODB_ADMIN_PASSWORD
+                  value: '${MONGODB_ADMIN_PASSWORD}'
+              image: '${APPLICATION_NAME}'
+              imagePullPolicy: Always
+              name: '${APPLICATION_NAME}'
+              ports:
+                - containerPort: 8080
+                  name: '${APPLICATION_NAME}-http'
+                  protocol: TCP
+                - containerPort: 8888
+                  name: '${APPLICATION_NAME}-ping'
+                  protocol: TCP
+              readinessProbe:
+                exec:
+                  command:
+                    - /bin/bash
+                    - '-c'
+                    - /opt/eap/bin/readinessProbe.sh
+              resources: {}
+              securityContext:
+                capabilities: {}
+                privileged: false
+              terminationMessagePath: /dev/termination-log
+          dnsPolicy: ClusterFirst
+          restartPolicy: Always
+      triggers:
+        - imageChangeParams:
+            automatic: true
+            containerNames:
+              - '${APPLICATION_NAME}'
+            from:
+              kind: ImageStreamTag
+              name: '${APPLICATION_NAME}:latest'
+          type: ImageChange
+        - type: ConfigChange
+  - apiVersion: v1
+    kind: Route
+    metadata:
+      annotations:
+        description: Route for application's http service
+      name: '${APPLICATION_NAME}'
+    spec:
+      host: '${APPLICATION_HOSTNAME}'
+      to:
+        kind: Service
+        name: '${APPLICATION_NAME}'
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      name: mongodb
+    spec:
+      ports:
+        - port: 27017
+          targetPort: 27017
+      selector:
+        deploymentConfig: '${APPLICATION_NAME}-mongodb'
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        description: The web server's http port
+      name: '${APPLICATION_NAME}'
+    spec:
+      ports:
+        - port: 8080
+          protocol: TCP
+          targetPort: 8080
+      selector:
+        deploymentConfig: '${APPLICATION_NAME}'
+  - apiVersion: v1
+    kind: Service
+    metadata:
+      annotations:
+        description: Ping service for clustered applications
+      name: '${APPLICATION_NAME}-ping'
+    spec:
+      ports:
+        - port: 8888
+          targetPort: 8888
+      selector:
+        deploymentConfig: '${APPLICATION_NAME}'
+parameters:
+  - description: The name for the application.
+    name: APPLICATION_NAME
+    value: mlbparks
+  - description: >-
+      Custom hostname for service routes.  Leave blank for default hostname,
+      e.g.: <application-name>.<project>.<default-domain-suffix>
+    name: APPLICATION_HOSTNAME
+  - description: Git source URI for application
+    name: GIT_URI
+    value: 'https://github.com/jorgemoralespou/openshift3mlbparks.git'
+  - description: Git branch/tag reference
+    name: GIT_REF
+    value: master
+  - description: >-
+      Maven mirror url. If nexus is deployed locally, use nexus url (e.g.
+      http://nexus.ci.apps.10.2.2.2.xip.io/content/groups/public/)
+    displayName: Maven mirror url
+    name: MAVEN_MIRROR_URL
+  - description: Database name
+    name: MONGODB_DATABASE
+    value: root
+  - description: Disable data file preallocation.
+    name: MONGODB_NOPREALLOC
+  - description: Set MongoDB to use a smaller default data file size.
+    name: MONGODB_SMALLFILES
+  - description: Runs MongoDB in a quiet mode that attempts to limit the amount of output.
+    name: MONGODB_QUIET
+  - description: Database user name
+    from: 'user[a-zA-Z0-9]{3}'
+    generate: expression
+    name: MONGODB_USER
+  - description: Database user password
+    from: '[a-zA-Z0-9]{8}'
+    generate: expression
+    name: MONGODB_PASSWORD
+  - description: Database admin password
+    from: '[a-zA-Z0-9]{8}'
+    generate: expression
+    name: MONGODB_ADMIN_PASSWORD
+  - description: Github trigger secret
+    from: '[a-zA-Z0-9]{8}'
+    generate: expression
+    name: GITHUB_TRIGGER_SECRET
+  - description: Generic build trigger secret
+    from: '[a-zA-Z0-9]{8}'
+    generate: expression
+    name: GENERIC_TRIGGER_SECRET

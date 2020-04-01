@@ -1,0 +1,43 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql2
+spec:
+  ports:
+  - port: 3306
+  selector:
+    app: mysql2
+  clusterIP: None
+---
+apiVersion: apps.openshift.io/v1 # for versions before 1.9.0 use apps/v1beta2
+kind: Deployment
+metadata:
+  name: mysql2
+spec:
+  selector:
+    matchLabels:
+      app: mysql2
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: mysql2
+    spec:
+      containers:
+      - image: mysql:5.6
+        name: mysql
+        env:
+          # Use secret in real usage
+        - name: MYSQL_ROOT_PASSWORD
+          value: password
+        ports:
+        - containerPort: 3306
+          name: mysql
+        volumeMounts:
+        - name: mysql-persistent-storage
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: mysql-persistent-storage
+        persistentVolumeClaim:
+          claimName: mysql1
