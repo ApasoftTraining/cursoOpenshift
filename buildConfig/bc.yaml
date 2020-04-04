@@ -1,0 +1,12 @@
+kind: "BuildConfig"
+apiVersion: "v1"
+metadata:
+      name: cakephp-mysql-example
+      annotations:
+        description: Ejemplo de build
+spec:
+      source:
+        type: Git
+        git:
+          uri: https://github.com/sclorg/cakephp-ex.git
+
