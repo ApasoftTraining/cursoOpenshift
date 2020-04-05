@@ -1,0 +1,50 @@
+kind: Template
+apiVersion: v1
+metadata:
+  name: plantilla-build
+  annotations:
+        description: Plantilla con BuildConfig para aplicacion PHP
+objects:
+  - kind: BuildConfig
+    apiVersion: v1
+    metadata:
+      name: "${APLICACION}"
+      annotations:
+        description: Ejemplo de plantilla con Buildconfig
+    spec:
+      output:
+        to:
+          kind: ImageStreamTag
+          name: '${APLICACION}:latest'
+      source:
+        type: Git
+        git:
+          uri: "${SOURCE_REPOSITORY_URL}" 
+      strategy:
+         sourceStrategy:
+          from:
+             kind: ImageStreamTag
+             name: php:7.2
+             namespace: openshift
+         type: Source
+      triggers:
+        - imageChange: {}
+          type: ImageChange
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
+      name: '${APLICACION}'
+    spec:
+      dockerImageRepository: ''
+      tags:
+        - name: latest
+parameters:
+  - name: SOURCE_REPOSITORY_URL 
+    displayName: Repositorio GIT de la aplicacion
+    description: Donde se encuentra la aplicacion 
+    value: https://github.com/ApasoftTraining/cakephp-ex 
+    required: true 
+  - description: Nombre aplicacion.
+    name: APLICACION
+    value: aplicacion
+message: "... Aplicacion ${APLICACION} creada desde una plantilla."

@@ -1,0 +1,3 @@
+REDIS_PASSWORD=secret
+SERVIDOR=servidor4
+NOMBRE_CONTENEDOR=contenedor4

@@ -1,0 +1,37 @@
+{
+    "kind": "List",
+    "apiVersion": "v1",
+    "metadata": {},
+    "items": [
+        {
+            "apiVersion": "v1",
+            "kind": "Pod",
+            "metadata": {
+                "labels": {
+                    "redis": "master"
+                },
+                "name": "servidorbexul"
+            },
+            "spec": {
+                "containers": [
+                    {
+                        "env": [
+                            {
+                                "name": "REDIS_PASSWORD",
+                                "value": "G0RBQ2HS"
+                            }
+                        ],
+                        "image": "redis",
+                        "name": "redis-mio",
+                        "ports": [
+                            {
+                                "containerPort": 6379,
+                                "protocol": "TCP"
+                            }
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}
