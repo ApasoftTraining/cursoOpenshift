@@ -1,0 +1,38 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  name: ruby1
+spec:
+  failedBuildsHistoryLimit: 5
+  nodeSelector: null
+  output:
+    to:
+      kind: ImageStreamTag
+      name: ruby1:latest
+  postCommit: {}
+  resources: {}
+  runPolicy: Serial
+  source:
+    git:
+      uri: https://github.com/ApasoftTraining/ruby-hello-world 
+    type: Git
+  strategy:
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        name: ruby:2.5
+        namespace: openshift
+    type: Source
+  successfulBuildsHistoryLimit: 5
+  triggers:
+  - generic:
+      secretReference:
+        name: ruby1-generic-webhook-secret
+    type: Generic
+  - github:
+      secretReference:
+        name: ruby1-github-webhook-secret
+    type: GitHub
+  - imageChange:
+    type: ImageChange
+  - type: ConfigChange
