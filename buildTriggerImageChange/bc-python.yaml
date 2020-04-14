@@ -1,37 +1,36 @@
 apiVersion: build.openshift.io/v1
 kind: BuildConfig
 metadata:
-  name: ruby-app
+  name: pythonapp
 spec:
   failedBuildsHistoryLimit: 5
   nodeSelector: null
   output:
     to:
       kind: ImageStreamTag
-      name: rubyapp:latest
+      name: pythonapp:latest
   postCommit: {}
   resources: {}
   runPolicy: Serial
   source:
     git:
-      uri: https://github.com/ApasoftTraining/ruby-app 
+      uri: https://github.com/ApasoftTraining/python-app 
     type: Git
   strategy:
     sourceStrategy:
       from:
         kind: ImageStreamTag
-        name: ruby:2.5
-        namespace: openshift
+        name: mi-imagen:v1
     type: Source
   successfulBuildsHistoryLimit: 5
   triggers:
   - generic:
       secretReference:
-        name: rubyapp-generic-webhook-secret
+        name: pythonapp-generic-webhook-secret
     type: Generic
   - github:
       secretReference:
-        name: ruby1-github-webhook-secret
+        name: pythonapp-github-webhook-secret
     type: GitHub
   - imageChange:
     type: ImageChange
