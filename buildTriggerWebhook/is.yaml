@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: ImageStream
+metadata:
+  name: mi-imagen
+spec:
+  tags:
+  - name: "v1"
+    from:
+      kind: DockerImage
+      name:  openshift/python-33-centos7
