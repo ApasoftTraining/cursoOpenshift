@@ -1,0 +1,45 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: odoo
+spec:
+  replicas: 1
+  selector:
+    deploymentconfig: odoo
+  template:
+    metadata:
+      labels:
+        deploymentconfig: odoo
+    spec:
+      containers:
+      - env:
+        - name: HOST
+          value: postgres-svc
+        - name: PASSWORD
+          value: secret
+        - name: USER
+          value: odoo
+        image: odoo
+        imagePullPolicy: Always
+        name: odoo
+        ports:
+        - containerPort: 8069
+          protocol: TCP
+        - containerPort: 8071
+          protocol: TCP
+        - containerPort: 8072
+          protocol: TCP
+        resources: {}
+        volumeMounts:
+        - mountPath: /mnt/extra-addons
+          name: odoo-volume-1
+        - mountPath: /var/lib/odoo
+          name: odoo-volume-2
+      volumes:
+      - emptyDir: {}
+        name: odoo-volume-1
+      - emptyDir: {}
+        name: odoo-volume-2
+  test: false
+  triggers:
+  - type: ConfigChange
