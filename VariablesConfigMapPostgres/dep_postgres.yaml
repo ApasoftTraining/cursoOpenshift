@@ -1,0 +1,32 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: postgres-db
+spec:
+  replicas: 1
+  selector:
+    deploymentconfig: postgres-db
+  template:
+    metadata:
+      labels:
+        deploymentconfig: postgres-db
+    spec:
+      containers:
+      - image: postgres:11
+        imagePullPolicy: Always
+        name: postgres-db
+        ports:
+        - containerPort: 5432
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-db-volume
+        envFrom:
+         - configMapRef: 
+              name: postgres-cm
+      volumes:
+      - emptyDir: {}
+        name: postgres-db-volume
+  test: false
+  triggers:
+  - type: ConfigChange

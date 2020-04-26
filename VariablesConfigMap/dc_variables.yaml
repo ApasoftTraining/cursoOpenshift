@@ -1,0 +1,19 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: ejemplo-variables
+spec:
+  replicas: 2
+  selector:
+    app: variables
+  template:
+    metadata:
+      labels:
+        app: variables
+    spec:
+      containers:
+       - name: variables
+         image: gcr.io/google-samples/node-hello:1.0
+         envFrom:
+         - configMapRef:
+            name: cf1
