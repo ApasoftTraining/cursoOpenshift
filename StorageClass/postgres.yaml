@@ -1,0 +1,36 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: postgres-db1
+spec:
+  replicas: 1
+  selector:
+    deploymentconfig: postgres-db1
+  template:
+    metadata:
+      labels:
+        deploymentconfig: postgres-db1
+    spec:
+      containers:
+      - image: postgres:11
+        imagePullPolicy: Always
+        name: postgres-db1
+        ports:
+        - containerPort: 5432
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /var/lib/postgresql/data
+          name: postgres-db-volume1
+        env:
+         - name: POSTGRES_PASSWORD
+           value: "secret"
+         - name: POSTGRES_USER
+           value: "odoo"
+         - name: POSTGRES_DB
+           value: "postgres"
+      volumes:
+      - name: postgres-db-volume1
+        persistentVolumeClaim:
+           claimName: pvc-bbdd 
+  triggers:
+  - type: ConfigChange

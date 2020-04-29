@@ -1,0 +1,13 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  annotations:
+    description: Esto es un ejemplo
+  creationTimestamp: "2020-04-28T22:57:40Z"
+  name: cs-bbdd
+  resourceVersion: "2782513"
+  selfLink: /apis/storage.k8s.io/v1/storageclasses/cs-bbdd
+  uid: c77bc3d9-0752-4425-a5f0-00f2c872a4ee
+provisioner: kubernetes.io/no-provisioner
+reclaimPolicy: Delete
+volumeBindingMode: WaitForFirstConsumer
