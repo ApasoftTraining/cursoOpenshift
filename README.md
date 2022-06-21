@@ -19,3 +19,5 @@ Apasoft Training
 
 ![logo-apasoft Training - copia](https://user-images.githubusercontent.com/54261225/174832270-525d5285-6b60-445b-8f87-2e71d2351a40.jpg)
 
+apasoft.formacion@gmail.com
+
