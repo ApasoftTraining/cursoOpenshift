@@ -1,11 +1,21 @@
-CURSO OPENSHIFT 4
-=================
+# Curso "OPENSHIFT 4" de  Apasoft Training
 
-Ejemplos y prácticas del curso de Openshift4 de Apasoft Training
-
-PAra cualquier información
-
-apasoft.training@gmail.com
+## Ficheros y ejercicios del curso de Openshift de Apasoft Training en UDEMY
 
 
-www.apasoft-training.com
+Si quieres inscribirte en este curso, puedes hacerlo con un gran descuento sobre el precio oficial.
+
+Lo tengo publicado en Udemy, con lo que tienes un plazo de 30 días para devolverlo si no te convence.
+
+Accede a mi página Web para ver las ofertas sobre este y otros cursos que tengo publicados
+
+## http://www.apasoft-training.com
+
+Cualquier duda o pregunta, no dudes en ponerte en contacto con nosotros
+
+Saludos
+Apasoft Training
+
+
+![logo-apasoft Training - copia](https://user-images.githubusercontent.com/54261225/174832270-525d5285-6b60-445b-8f87-2e71d2351a40.jpg)
+
